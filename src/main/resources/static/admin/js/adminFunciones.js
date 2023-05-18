@@ -1,19 +1,18 @@
-urlBase="http://127.0.0.1:8080/api/Gama"
+urlBase="http://127.0.0.1:8080/api/Admin"
 
-function traerInformacion() 
+function traerInformacion()     
 {   
     $.ajax(
     {
         url:urlBase + "/all",
         type:"GET",
-        datatype:"JSON", 
+        datatype:"JSON",
 
-        success:function(respuesta)   
+        success:function(respuesta)    
         {
             borrarTabla();
             console.log(respuesta);
-        
-            pintarRespuesta(respuesta.items);
+            pintarRespuesta(respuesta.items); 
         }
     });
 }
@@ -25,9 +24,9 @@ function pintarRespuesta(items)
     myTable+="<tr>";
 
     myTable+="<td>Id</td>";
-    myTable+="<td>Brand</td>";
-    myTable+="<td>Model</td>";
-    myTable+="<td>Category_id</td>";
+    myTable+="<td>Name</td>";
+    myTable+="<td>Email</td>";
+    myTable+="<td>Password</td>";
     myTable+="<td>Acción</td>";
 
     myTable+="</tr>";
@@ -38,11 +37,11 @@ function pintarRespuesta(items)
     for(i=0; i<items.length; i++)
     {   
         myTable+="<tr>";
-        myTable+="<td>" +items[i].idGama+"</td>";
-        myTable+="<td>" +items[i].brand+"</td>";
-        myTable+="<td>" +items[i].model+"</td>";
-        myTable+="<td>" +items[i].category_id+"</td>";
-        myTable+="<td> <button class='smallButton' onclick='borrarElemento("+items[i].idGama+")'>Borrar</button> <button class='smallButton' onclick='getOneData("+items[i].idGama+")'>Editar</button>";
+        myTable+="<td>" +items[i].idAdmin+"</td>";
+        myTable+="<td>" +items[i].name+"</td>";
+        myTable+="<td>" +items[i].email+"</td>";
+        myTable+="<td>" +items[i].password+"</td>";
+        myTable+="<td> <button class='smallButton' onclick='borrarElemento("+items[i].idAdmin+")'>Borrar</button> <button class='smallButton' onclick='getOneData("+items[i].idAdmin+")'>Editar</button>";
         myTable+="</tr>";
     }
     myTable+="</table>";
@@ -52,9 +51,10 @@ function pintarRespuesta(items)
 function guardarInformacion()
 {
     let myData={
-        idGama:$("#idGama").val(),
+        idAdmin:$("#idAdmin").val(),
         name:$("#name").val(),
-        description:$("#description").val(),
+        email:$("#email").val(),
+        password:$("#password").val(),
     };
 
     let dataToSend=JSON.stringify(myData);
@@ -63,14 +63,15 @@ function guardarInformacion()
         url: urlBase + "/save",
         type: "POST",
         data:myData,
-        datatype:"JSON",        
+        datatype:"JSON",        //Lo que estoy esperando
         success:function(respuesta)
         {
-            $("#resultado").empty();     
-            $("#idGama").val("");
+            $("#resultado").empty();      //Borra la tabla
+            $("#idAdmin").val("");
             $("#name").val("");
-            $("#description").val("");
-            traerInformacion();  
+            $("#email").val("");
+            $("#password").val("");
+            traerInformacion();     //Trae toda la tabla de nuevo
             alert("Se ha guardado.")
         }
     })
@@ -85,9 +86,10 @@ function borrarTabla()
 function editarInformacion()
 {
     let myData={
-        idGama:$("#idGama").val(),
+        idAdmin:$("#idAdmin").val(),
         name:$("#name").val(),
-        description:$("#description").val(),
+        email:$("#email").val(),
+        password:$("#password").val(),
     };
     let dataToSend=JSON.stringify(myData);
 
@@ -96,30 +98,31 @@ function editarInformacion()
         url:urlBase + "/update",
         type:"PUT",
         data:dataToSend,
-        contentType:"application/JSON", 
+        contentType:"application/JSON", //Le digo al servidor en qué formato le estoy enviando la información
         datatype:"JSON",
         success:function(respuesta)
         {
             $("#resultado").empty(); 
-            $("#idGama").val("");
+            $("#idAdmin").val("");
             $("#name").val("");
-            $("#description").val("");
+            $("#email").val("");
+            $("#password").val("");
             traerInformacion(); 
             alert("Se ha actualizado.")
         }
     });
 }
 
-function borrarElemento(idGamaElemento)
+function borrarElemento(idElemento)
 {
     let myData={
-        idGama:idGamaElemento
+        idAdmin:idElemento
     };
 
     let dataToSend=JSON.stringify(myData);
     $.ajax(
     {
-        url:urlBase +"/" + idGamaElemento,
+        url:urlBase +"/" + idElemento,
         type:"DELETE",
         data:dataToSend,
         contentType:"application/JSON",
@@ -133,11 +136,11 @@ function borrarElemento(idGamaElemento)
     })
 }
 
-function getOneData(idGamaaEditar)
+function getOneData(idaEditar)
 {
     $.ajax(
         {
-            url:urlBase+"/"+idGamaaEditar,
+            url:urlBase+"/"+idaEditar,
             type:"GET",
             datatype:"JSON", 
     
@@ -151,7 +154,8 @@ function getOneData(idGamaaEditar)
 
 function screentoModify(items)
 {
-    $("#idGama").val(items[0].idGama);
+    $("#idAdmin").val(items[0].idAdmin);
     $("#name").val(items[0].name);
-    $("#description").val(items[0].description);
+    $("#email").val(items[0].email);
+    $("#password").val(items[0].password);
 }

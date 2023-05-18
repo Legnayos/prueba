@@ -1,10 +1,10 @@
-urlBase="https://g3abc75efab1e37-bdinstanciaapexg1.adb.us-ashburn-1.oraclecloudapps.com/ords/admin/client/client"
+urlBase="http://127.0.0.1:8080/api/Client"
 
 function traerInformacion()      //Agregamos un metodo
 {   
     $.ajax(
     {
-        url:urlBase,
+        url:urlBase + "/all",
         type:"GET",
         datatype:"JSON", //corresponde al tipo de dato que esperamos que el sevidor nos entregue
 
@@ -26,7 +26,7 @@ function pintarRespuesta(items)
     myTable+="<td>Id</td>";
     myTable+="<td>Name</td>";
     myTable+="<td>Email</td>";
-    myTable+="<td>Age</td>";
+    myTable+="<td>Password</td>";
     myTable+="<td>Acción</td>";
 
     myTable+="</tr>";
@@ -37,11 +37,11 @@ function pintarRespuesta(items)
     for(i=0; i<items.length; i++)
     {   
         myTable+="<tr>";
-        myTable+="<td>" +items[i].id+"</td>";
+        myTable+="<td>" +items[i].idClient+"</td>";
         myTable+="<td>" +items[i].name+"</td>";
         myTable+="<td>" +items[i].email+"</td>";
-        myTable+="<td>" +items[i].age+"</td>";
-        myTable+="<td> <button class='smallButton' onclick='borrarElemento("+items[i].id+")'>Borrar</button> <button class='smallButton' onclick='getOneData("+items[i].id+")'>Editar</button>";
+        myTable+="<td>" +items[i].password+"</td>";
+        myTable+="<td> <button class='smallButton' onclick='borrarElemento("+items[i].idClient+")'>Borrar</button> <button class='smallButton' onclick='getOneData("+items[i].idClient+")'>Editar</button>";
         myTable+="</tr>";
     }
     myTable+="</table>";
@@ -51,26 +51,26 @@ function pintarRespuesta(items)
 function guardarInformacion()
 {
     let myData={
-        id:$("#id").val(),
+        idClient:$("#idClient").val(),
         name:$("#name").val(),
         email:$("#email").val(),
-        age:$("#age").val(),
+        password:$("#password").val(),
     };
 
     let dataToSend=JSON.stringify(myData);
     $.ajax(
     {
-        url: urlBase,
+        url: urlBase + "/save",
         type: "POST",
         data:myData,
         datatype:"JSON",        //Lo que estoy esperando
         success:function(respuesta)
         {
             $("#resultado").empty();      //Borra la tabla
-            $("#id").val("");
+            $("#idClient").val("");
             $("#name").val("");
             $("#email").val("");
-            $("#age").val("");
+            $("#password").val("");
             traerInformacion();     //Trae toda la tabla de nuevo
             alert("Se ha guardado.")
         }
@@ -86,16 +86,16 @@ function borrarTabla()
 function editarInformacion()
 {
     let myData={
-        id:$("#id").val(),
+        idClient:$("#idClient").val(),
         name:$("#name").val(),
         email:$("#email").val(),
-        age:$("#age").val(),
+        password:$("#password").val(),
     };
     let dataToSend=JSON.stringify(myData);
 
     $.ajax(
     {
-        url:urlBase,
+        url:urlBase +"/update",
         type:"PUT",
         data:dataToSend,
         contentType:"application/JSON", //Le digo al servidor en qué formato le estoy enviando la información
@@ -103,10 +103,10 @@ function editarInformacion()
         success:function(respuesta)
         {
             $("#resultado").empty(); 
-            $("#id").val("");
+            $("#idClient").val("");
             $("#name").val("");
             $("#email").val("");
-            $("#age").val("");
+            $("#password").val("");
             traerInformacion(); 
             alert("Se ha actualizado.")
         }
@@ -116,13 +116,13 @@ function editarInformacion()
 function borrarElemento(idElemento)
 {
     let myData={
-        id:idElemento
+        idClient:idElemento
     };
 
     let dataToSend=JSON.stringify(myData);
     $.ajax(
     {
-        url:urlBase,
+        url:urlBase +"/"+ idElemento,
         type:"DELETE",
         data:dataToSend,
         contentType:"application/JSON",
@@ -154,8 +154,8 @@ function getOneData(idaEditar)
 
 function screentoModify(items)
 {
-    $("#id").val(items[0].id);
+    $("#idClient").val(items[0].idClient);
     $("#name").val(items[0].name);
     $("#email").val(items[0].email);
-    $("#age").val(items[0].age);
+    $("#password").val(items[0].password);
 }

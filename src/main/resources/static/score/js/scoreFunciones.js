@@ -1,6 +1,6 @@
-urlBase="http://127.0.0.1:8080/api/Gama"
+urlBase="http://127.0.0.1:8080/api/Score"
 
-function traerInformacion() 
+function traerInformacion()    
 {   
     $.ajax(
     {
@@ -12,8 +12,7 @@ function traerInformacion()
         {
             borrarTabla();
             console.log(respuesta);
-        
-            pintarRespuesta(respuesta.items);
+            pintarRespuesta(respuesta.items); 
         }
     });
 }
@@ -25,9 +24,8 @@ function pintarRespuesta(items)
     myTable+="<tr>";
 
     myTable+="<td>Id</td>";
-    myTable+="<td>Brand</td>";
-    myTable+="<td>Model</td>";
-    myTable+="<td>Category_id</td>";
+    myTable+="<td>messageText</td>";
+    myTable+="<td>Stars</td>";
     myTable+="<td>Acción</td>";
 
     myTable+="</tr>";
@@ -38,11 +36,10 @@ function pintarRespuesta(items)
     for(i=0; i<items.length; i++)
     {   
         myTable+="<tr>";
-        myTable+="<td>" +items[i].idGama+"</td>";
-        myTable+="<td>" +items[i].brand+"</td>";
-        myTable+="<td>" +items[i].model+"</td>";
-        myTable+="<td>" +items[i].category_id+"</td>";
-        myTable+="<td> <button class='smallButton' onclick='borrarElemento("+items[i].idGama+")'>Borrar</button> <button class='smallButton' onclick='getOneData("+items[i].idGama+")'>Editar</button>";
+        myTable+="<td>" +items[i].idScore+"</td>";
+        myTable+="<td>" +items[i].messageText+"</td>";
+        myTable+="<td>" +items[i].stars+"</td>";
+        myTable+="<td> <button class='smallButton' onclick='borrarElemento("+items[i].idScore+")'>Borrar</button> <button class='smallButton' onclick='getOneData("+items[i].idScore+")'>Editar</button>";
         myTable+="</tr>";
     }
     myTable+="</table>";
@@ -52,9 +49,9 @@ function pintarRespuesta(items)
 function guardarInformacion()
 {
     let myData={
-        idGama:$("#idGama").val(),
-        name:$("#name").val(),
-        description:$("#description").val(),
+        idScore:$("#idScore").val(),
+        messageText:$("#messageText").val(),
+        stars:$("#stars").val(),
     };
 
     let dataToSend=JSON.stringify(myData);
@@ -63,14 +60,14 @@ function guardarInformacion()
         url: urlBase + "/save",
         type: "POST",
         data:myData,
-        datatype:"JSON",        
+        datatype:"JSON",        //Lo que estoy esperando
         success:function(respuesta)
         {
-            $("#resultado").empty();     
-            $("#idGama").val("");
-            $("#name").val("");
-            $("#description").val("");
-            traerInformacion();  
+            $("#resultado").empty();      //Borra la tabla
+            $("#idScore").val("");
+            $("#messageText").val("");
+            $("#stars").val("");
+            traerInformacion();     //Trae toda la tabla de nuevo
             alert("Se ha guardado.")
         }
     })
@@ -85,9 +82,9 @@ function borrarTabla()
 function editarInformacion()
 {
     let myData={
-        idGama:$("#idGama").val(),
-        name:$("#name").val(),
-        description:$("#description").val(),
+        idScore:$("#idScore").val(),
+        messageText:$("#messageText").val(),
+        stars:$("#stars").val(),
     };
     let dataToSend=JSON.stringify(myData);
 
@@ -96,30 +93,30 @@ function editarInformacion()
         url:urlBase + "/update",
         type:"PUT",
         data:dataToSend,
-        contentType:"application/JSON", 
+        contentType:"application/JSON", //Le digo al servidor en qué formato le estoy enviando la información
         datatype:"JSON",
         success:function(respuesta)
         {
             $("#resultado").empty(); 
-            $("#idGama").val("");
-            $("#name").val("");
-            $("#description").val("");
+            $("#idScore").val("");
+            $("#messageText").val("");
+            $("#stars").val("");
             traerInformacion(); 
             alert("Se ha actualizado.")
         }
     });
 }
 
-function borrarElemento(idGamaElemento)
+function borrarElemento(idElemento)
 {
     let myData={
-        idGama:idGamaElemento
+        idScore:idElemento
     };
 
     let dataToSend=JSON.stringify(myData);
     $.ajax(
     {
-        url:urlBase +"/" + idGamaElemento,
+        url:urlBase +"/" + idElemento,
         type:"DELETE",
         data:dataToSend,
         contentType:"application/JSON",
@@ -133,11 +130,11 @@ function borrarElemento(idGamaElemento)
     })
 }
 
-function getOneData(idGamaaEditar)
+function getOneData(idaEditar)
 {
     $.ajax(
         {
-            url:urlBase+"/"+idGamaaEditar,
+            url:urlBase+"/"+idaEditar,
             type:"GET",
             datatype:"JSON", 
     
@@ -151,7 +148,7 @@ function getOneData(idGamaaEditar)
 
 function screentoModify(items)
 {
-    $("#idGama").val(items[0].idGama);
-    $("#name").val(items[0].name);
-    $("#description").val(items[0].description);
+    $("#idScore").val(items[0].idScore);
+    $("#messageText").val(items[0].messageText);
+    $("#stars").val(items[0].stars);
 }

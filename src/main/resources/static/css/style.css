@@ -51,18 +51,3 @@ h1 {
 	color: #333333;
 	cursor: pointer;
 }
-
-thead{
-    background-color: #ffffff;  
-}
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-th, td {
-  border: 1px solid black;
-  padding: 8px;
-  text-align: left;
-}

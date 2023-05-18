@@ -15,10 +15,12 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @Entity
-@Table(name="Cars") //No se si sea cars o car
+@Table(name="Cars") 
 
+@JsonPropertyOrder({"idCar", "name", "brand", "year", "description", "gama", "messages", "reservations"})
 public class Car implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +34,7 @@ public class Car implements Serializable{
 
     @ManyToOne
     @JoinColumn(name="idGama")
-    @JsonIgnoreProperties("cars") //por que cars y no car?
+    @JsonIgnoreProperties("cars") 
     private Gama gama;
 
     @OneToMany(cascade = (CascadeType.PERSIST), mappedBy = "car" )
@@ -43,8 +45,7 @@ public class Car implements Serializable{
     @JsonIgnoreProperties("car")
     private List <Reservation> reservations;
 
-    public Car(){
-
+    public Car() {
     }
 
     public Integer getIdCar() {
@@ -111,4 +112,5 @@ public class Car implements Serializable{
         this.reservations = reservations;
     }
 
+    
 }
